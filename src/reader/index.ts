@@ -6,8 +6,9 @@ import { template } from '../utils/index';
 import { store } from '../utils/store';
 import * as config from '../utils/config';
 import { TemplatePath } from '../config';
-
+import {readerDriver as SQLDriver} from './driver/sqlite';
 class ReaderDriver {
+ 
   public getLocalBooks(path: string): Promise<string[]> {
     const drivers = this.getDrivers();
     return new Promise(function (resolve, reject) {
@@ -49,8 +50,14 @@ class ReaderDriver {
       import('./driver/' + treeNode.type.substr(1))
         .then(({ readerDriver }) => readerDriver.getContent(treeNode.path))
         .then((text: string) => {
+          let progress='0';
+          if(treeNode && treeNode.type === '.sqlite' && typeof treeNode.path === 'string'){
+            progress=config.get('SQLITE_id_'+treeNode.path, 'progress');
+          }else{
+            progress=config.get(treeNode.path, 'progress')
+          }
           const html = template(store.extensionPath, TemplatePath.templateHtml, {
-            progress: config.get(treeNode.path, 'progress'),
+            progress: progress,
             contentType: 'html',
             content: text
           });
@@ -102,6 +109,30 @@ class ReaderDriver {
     return fileDir ? fileDir : store.booksPath;
   }
 
+  
+  public async getSQLBooks(): Promise<TreeNode[]> {
+    //const fileDir = this.getFileDir();
+
+    //const result: TreeNode[] = [];
+    return await SQLDriver.getBookList();
+    // try {
+      
+    //     result.push(
+    //       new TreeNode(
+    //         Object.assign({}, defaultTreeNode, {
+    //           type: ".sqlite",
+    //           name: "test",
+    //           isDirectory: false,
+    //           path: 'test'
+    //         })
+    //       )
+    //     );
+    // } catch (error) {
+    //   console.log(error);
+    //   window.showWarningMessage('读取目录失败, 请检测您的目录设置');
+    // }
+    //return result;
+  }
   // 获取列表
   public async getAllBooks(): Promise<TreeNode[]> {
     const fileDir = this.getFileDir();

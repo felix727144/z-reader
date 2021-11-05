@@ -28,6 +28,18 @@ export const openReaderWebView = function (treeNode: TreeNode) {
   });
 };
 
+export const sqliteList = async function () {
+  const notification = new Notification('加载SQLITE小说');
+  try {
+    const treeNode: TreeNode[] = await explorerNodeManager.getSQLBooks();
+    treeDataProvider.fire();
+    explorerNodeManager.treeNode = treeNode;
+  } catch (error) {
+    console.warn(error);
+  }
+  notification.stop();
+};
+
 export const localRefresh = async function () {
   const notification = new Notification('加载本地小说');
   try {
@@ -39,7 +51,6 @@ export const localRefresh = async function () {
   }
   notification.stop();
 };
-
 export const collectRefresh = async function () {
   const notification = new Notification('加载收藏列表');
   try {
@@ -180,6 +191,8 @@ export const progressUpdate = function (data: any) {
   const treeNode = previewProvider.getTreeNode();
   if (treeNode && treeNode.type === '.txt' && typeof treeNode.path === 'string') {
     config.set(treeNode.path, 'progress', data.progress);
+  }else if(treeNode && treeNode.type === '.sqlite' && typeof treeNode.path === 'string'){
+    config.set('SQLITE_id_'+treeNode.path, 'progress', data.progress);
   }
 };
 

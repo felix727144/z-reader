@@ -15,6 +15,7 @@ import {
   cancelCollect,
   clearCollect,
   localRefresh,
+  sqliteList,
   editTemplateHtml,
   editTemplateCss,
   goProgress,
@@ -25,7 +26,7 @@ import {
 } from './commands';
 
 export async function activate(context: ExtensionContext): Promise<void> {
-  console.log('activate');
+  console.log('activate',context);
   // store
   store.extensionPath = context.extensionPath;
   store.booksPath = Path.join(context.extensionPath, 'book');
@@ -40,6 +41,11 @@ export async function activate(context: ExtensionContext): Promise<void> {
     commands.registerCommand(Commands.localRefresh, () => {
       commands.executeCommand('setContext', 'zreader.panel', 'local');
       localRefresh();
+    }),
+    //SQLITE 
+    commands.registerCommand(Commands.sqliteList, () => {
+      commands.executeCommand('setContext', 'zreader.panel', 'sqlite');
+      sqliteList();
     }),
     // 打开本地目录
     commands.registerCommand(Commands.openLocalDirectory, openLocalDirectory),

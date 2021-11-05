@@ -18,7 +18,7 @@
         <li><a data-cmd-param='{"cmd": "editHtml"}'>页面编辑</a></li>
         <li><a data-cmd-param='{"cmd": "goProgress"}'>进度跳转</a></li>
       </ul>
-      <div class="content" style="font-size: 16px">{{ content }}</div>
+      <div class="content" style="font-size: 16px;" ref="ct">{{ content }}</div>
     </div>
     <script>
       (function () {
@@ -94,12 +94,31 @@
               break;
           }
         });
-
+        var contentContainer = document.querySelector('#app');
+        if(contentContainer){
+          contentContainer.addEventListener('scroll', (e)=>{
+            var progress = e.target.scrollTop / e.target.scrollHeight;
+            //console.log('new progress',progress)
+            mVscodeHelper.on('progress:update', {
+              progress: progress
+            });
+          },true);
+        }
         // 更新进度
         var goProgress = function (data) {
-          contentDiv.scrollTop = contentDiv.scrollHeight * new Number(data.progress || 0);
+          if(contentContainer){
+            contentContainer.scrollTop = contentContainer.scrollHeight * new Number(data.progress || 0);
+          }
         };
         goProgress({ progress: '{{ progress }}' });
+        var contentDivOnWheelScrool = throttle(function (e) {
+          var progress = e.offsetY / e.target.scrollHeight;
+          //console.log('new progress',progress)
+          mVscodeHelper.on('progress:update', {
+            progress: progress
+          });
+        }, 1000);
+        
         // 处理小说进度
         if (contentDiv) {
           // 鼠标滚轮事件
@@ -114,18 +133,29 @@
               } else {
                 contentDiv.style.fontSize = Number(contentDiv.style.fontSize.replace('px', '')) - 1 + 'px';
               }
+            }else{
+              //contentDivOnWheelScrool(e);
+              //var progress = e.offsetY / e.target.scrollHeight;
+              //console.log('on wheel',progress,e);
             }
+            //var progress = e.target.scrollTop / e.target.scrollHeight;
+            
           };
           contentDiv.addEventListener('onwheel' in document ? 'wheel' : 'mousewheel', contentDivOnWheel);
 
           // 滚动条事件
           var contentDivOnScroll = throttle(function (e) {
-            var progress = e.target.scrollTop / e.target.scrollHeight;
+            var progress = e.target.offsetHeight / e.target.clientHeight;
+            //console.log('new progress',progress)
             mVscodeHelper.on('progress:update', {
               progress: progress
             });
           }, 1000);
-          contentDiv.addEventListener('scroll', contentDivOnScroll);
+          //contentDiv.addEventListener('scroll', contentDivOnScroll);
+          // contentDiv.addEventListener('scroll', (ev)=>{
+          //   console.log('on scroll',ev);
+          // },true);
+
         }
       })();
     </script>

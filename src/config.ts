@@ -3,6 +3,7 @@ import * as path from 'path';
 export enum Commands {
   openReaderWebView = 'z-reader.local.openReaderWebView',
   localRefresh = 'z-reader.command.refresh',
+  sqliteList = 'z-reader.command.sqliteList',
   openLocalDirectory = 'z-reader.command.openLocalDirectory',
   searchOnline = 'z-reader.command.searchOnline',
   editTemplateHtml = 'z-reader.editTemplateHtml',

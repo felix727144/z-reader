@@ -17,6 +17,15 @@ class ExplorerNodeManager implements Disposable {
     });
   }
 
+  public getSQLBooks(): Promise<TreeNode[]> {
+    return new Promise((resolve) => {
+      readerDriver.getSQLBooks().then((treeNode: TreeNode[]) => {
+        this.treeNode = treeNode;
+        resolve(this.treeNode);
+      });
+    });
+  }
+
   public setTreeNode(treeNode: TreeNode[]) {
     this.treeNode = treeNode;
   }

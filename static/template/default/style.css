@@ -10,7 +10,7 @@ body {
 }
 
 body {
-  background-color: #282c34;
+  background-color: #000000;
 }
 
 #app {
@@ -27,8 +27,9 @@ body {
 }
 
 .content {
+  height: 100%;
   background: transparent;
-  color: #abb2bf;
+  color: #837979;
   white-space: pre-line;
   word-break: break-all;
   word-wrap: break-word;

@@ -12,7 +12,7 @@ export const defaultTreeNode: IReader = {
 
 export class TreeNode {
   constructor(public data: IReader) {}
-
+ 
   public get name(): string {
     return this.data.name;
   }

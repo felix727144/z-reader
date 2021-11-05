@@ -32,6 +32,11 @@
   "contributes": {
     "commands": [
       {
+        "command": "z-reader.command.sqliteList",
+        "title": "sqlite",
+        "category": "z-reader"
+      },
+      {
         "command": "z-reader.command.refresh",
         "title": "本地",
         "category": "z-reader"
@@ -122,9 +127,14 @@
           "group": "navigation@2"
         },
         {
-          "command": "z-reader.command.searchOnline",
+          "command": "z-reader.command.sqliteList",
           "when": "view == z-reader-menu",
           "group": "navigation@3"
+        },
+        {
+          "command": "z-reader.command.searchOnline",
+          "when": "view == z-reader-menu",
+          "group": "navigation@4"
         },
         {
           "command": "z-reader.command.openLocalDirectory",
@@ -192,6 +202,10 @@
         "z-reader.fileDir": {
           "type": "string",
           "description": "本地小说目录"
+        },
+        "z-reader.dbFile": {
+          "type": "string",
+          "description": "sqlite file"
         },
         "z-reader.onlineSite": {
           "type": "string",
@@ -267,18 +281,20 @@
     "eslint": "^7.1.0",
     "eslint-config-prettier": "^8.3.0",
     "glob": "^7.1.4",
-    "mocha": "^6.1.4",
+    "mocha": "^9.1.3",
     "tslint": "^5.12.1",
     "typescript": "^4.3.5",
     "vscode-test": "^1.2.0"
   },
   "dependencies": {
+    "@types/sqlite3": "^3.1.7",
     "cheerio": "^1.0.0-rc.3",
     "epub": "^1.2.0",
     "got": "^9.6.0",
     "hpagent": "^0.1.2",
     "iconv-lite": "^0.5.0",
     "open": "^7.0.0",
+    "sqlite3": "^5.0.2",
     "tough-cookie": "^4.0.0",
     "tslib": "^2.3.0"
   }
